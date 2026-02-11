@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Сообщение отправлено</title>
+ <style>
+ body { font-family: Arial, sans-serif; max-width: 600px; margin: 100px auto; padding: 20px; background-color: #f4f4f4; text-align: center; }
+ .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+ .success-icon { font-size: 60px; color: #28a745; margin-bottom: 20px; }
+ h1 { color: #333; margin-bottom: 20px; }
+ p { color: #666; font-size: 18px; margin-bottom: 30px; }
+ .back-btn { background: #007bff; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; }
+ .back-btn:hover { background: #0056b3; text-decoration: none; color: white; }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <div class="success-icon">✓</div>
+ <h1>Сообщение успешно отправлено!</h1>
+ <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
+ <a href="{{ url_for('index') }}" class="back-btn">Вернуться к форме</a>
+ </div>
+</body>
+</html>

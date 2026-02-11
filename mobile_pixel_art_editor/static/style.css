@@ -1,0 +1,239 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 10px;
+    touch-action: manipulation;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Инструменты */
+.tools {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.tool-btn {
+    flex: 1;
+    padding: 15px;
+    border: 3px solid #ddd;
+    border-radius: 15px;
+    background: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-height: 80px;
+}
+
+.tool-btn.active {
+    border-color: #667eea;
+    background: #f0f4ff;
+    color: #667eea;
+}
+
+.tool-icon {
+    font-size: 24px;
+}
+
+/* Палитра цветов */
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.color-btn {
+    width: 45px;
+    height: 45px;
+    border: 3px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.color-btn.active {
+    border-color: #333;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.color-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Канвас */
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.canvas {
+    display: grid;
+    grid-template-columns: repeat(16, 20px);
+    grid-template-rows: repeat(16, 20px);
+    gap: 1px;
+    background: #ccc;
+    border: 2px solid #333;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.pixel {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.pixel:hover {
+    box-shadow: inset 0 0 0 2px #667eea;
+}
+
+/* Кнопки действий */
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 18px;
+    border: none;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-height: 60px;
+}
+
+.clear-btn {
+    background: #ff6b6b;
+    color: white;
+}
+
+.clear-btn:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+}
+
+.download-btn {
+    background: #51cf66;
+    color: white;
+}
+
+.download-btn:hover {
+    background: #40c057;
+    transform: translateY(-2px);
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+        margin: 5px;
+    }
+    
+    h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .tool-btn {
+        padding: 12px;
+        font-size: 14px;
+        min-height: 70px;
+    }
+    
+    .color-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .canvas {
+        grid-template-columns: repeat(16, 18px);
+        grid-template-rows: repeat(16, 18px);
+    }
+    
+    .pixel {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .action-btn {
+        padding: 15px;
+        font-size: 16px;
+        min-height: 55px;
+    }
+}
+
+@media (max-width: 360px) {
+    .canvas {
+        grid-template-columns: repeat(16, 16px);
+        grid-template-rows: repeat(16, 16px);
+    }
+    
+    .pixel {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .color-btn {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Touch оптимизация */
+@media (pointer: coarse) {
+    .tool-btn,
+    .color-btn,
+    .pixel,
+    .action-btn {
+        touch-action: manipulation;
+    }
+    
+    .pixel:hover {
+        box-shadow: none;
+    }
+}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Мои заметки{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+ <div class="col-md-8">
+ <div class="d-flex justify-content-between align-items-center mb-4">
+ <h2>{{ title }}</h2>
+ <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+ <i class="fas fa-arrow-left"></i> Назад
+ </a>
+ </div>
+
+ <form method="POST">
+ {{ form.hidden_tag() }}
+ 
+ <div class="mb-3">
+ {{ form.title.label(class="form-label") }}
+ {{ form.title(class="form-control") }}
+ {% if form.title.errors %}
+ <div class="text-danger">
+ {% for error in form.title.errors %}
+ <small>{{ error }}</small>
+ {% endfor %}
+ </div>
+ {% endif %}
+ </div>
+
+ <div class="mb-3">
+ {{ form.content.label(class="form-label") }}
+ {{ form.content(class="form-control", rows="10") }}
+ {% if form.content.errors %}
+ <div class="text-danger">
+ {% for error in form.content.errors %}
+ <small>{{ error }}</small>
+ {% endfor %}
+ </div>
+ {% endif %}
+ </div>
+
+ <div class="mb-3">
+ {{ form.tags.label(class="form-label") }}
+ {{ form.tags(class="form-control", placeholder="работа, личное, идеи") }}
+ <small class="form-text text-muted">
+ Введите теги через запятую. Они помогут организовать ваши заметки.
+ </small>
+ </div>
+
+ <div class="d-flex justify-content-between">
+ <a href="{{ url_for('index') }}" class="btn btn-secondary">
+ <i class="fas fa-times"></i> Отмена
+ </a>
+ {{ form.submit(class="btn btn-primary") }}
+ </div>
+ </form>
+ </div>
+</div>
+{% endblock %}

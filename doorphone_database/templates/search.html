@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск - База домофонов{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+ <h1><i class="fas fa-search"></i> Результаты поиска</h1>
+ <a href="{{ url_for('index') }}" class="btn btn-secondary">
+ <i class="fas fa-arrow-left"></i> Назад
+ </a>
+</div>
+
+<div class="row mb-3">
+ <div class="col-md-6">
+ <form action="{{ url_for('search') }}" method="GET" class="d-flex">
+ <input type="text" name="q" class="form-control" placeholder="Поиск по адресу или коду..." value="{{ query }}">
+ <button type="submit" class="btn btn-outline-secondary ms-2">
+ <i class="fas fa-search"></i>
+ </button>
+ </form>
+ </div>
+</div>
+
+{% if query %}
+ <p class="text-muted">Поиск по запросу: <strong>"{{ query }}"</strong></p>
+{% endif %}
+
+{% if doorphones %}
+ <div class="row">
+ {% for doorphone in doorphones %}
+ <div class="col-md-6 col-lg-4 mb-3">
+ <div class="card doorphone-card h-100">
+ <div class="card-body">
+ <h5 class="card-title">
+ <i class="fas fa-map-marker-alt"></i> {{ doorphone.address }}
+ </h5>
+ {% if doorphone.entrance %}
+ <p class="card-text">
+ <small class="text-muted">
+ <i class="fas fa-door-closed"></i> Подъезд: {{ doorphone.entrance }}
+ </small>
+ </p>
+ {% endif %}
+ <p class="card-text code-display">
+ <i class="fas fa-key"></i> Код: {{ doorphone.code }}
+ </p>
+ {% if doorphone.notes %}
+ <p class="card-text">
+ <small class="text-muted">{{ doorphone.notes }}</small>
+ </p>
+ {% endif %}
+ </div>
+ <div class="card-footer bg-transparent">
+ <div class="btn-group w-100" role="group">
+ <a href="{{ url_for('edit_doorphone', id=doorphone.id) }}" class="btn btn-outline-primary btn-sm">
+ <i class="fas fa-edit"></i> Изменить
+ </a>
+ <a href="{{ url_for('delete_doorphone', id=doorphone.id) }}" 
+ class="btn btn-outline-danger btn-sm" 
+ onclick="return confirm('Вы уверены, что хотите удалить этот домофон?')">
+ <i class="fas fa-trash"></i> Удалить
+ </a>
+ </div>
+ </div>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ 
+ <div class="mt-4">
+ <small class="text-muted">
+ Найдено домофонов: {{ doorphones|length }}
+ </small>
+ </div>
+{% else %}
+ {% if query %}
+ <div class="text-center py-5">
+ <i class="fas fa-search fa-4x text-muted mb-3"></i>
+ <h3 class="text-muted">Ничего не найдено</h3>
+ <p class="text-muted">Попробуйте изменить поисковый запрос</p>
+ </div>
+ {% else %}
+ <div class="text-center py-5">
+ <i class="fas fa-search fa-4x text-muted mb-3"></i>
+ <h3 class="text-muted">Введите поисковый запрос</h3>
+ <p class="text-muted">Используйте поле поиска выше</p>
+ </div>
+ {% endif %}
+{% endif %}
+{% endblock %}

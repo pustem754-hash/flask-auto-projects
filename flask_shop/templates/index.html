@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head><title>Магазин</title></head>
+<body>
+<h1>Flask Магазин</h1>
+{% for p in products %}
+<div><h3>{{ p.name }}</h3><p>{{ p.price }} ₽</p></div>
+{% endfor %}
+</body>
+</html>

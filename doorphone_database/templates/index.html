@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+ <h1><i class="fas fa-building"></i> База домофонов</h1>
+ <a href="{{ url_for('add_doorphone') }}" class="btn btn-primary">
+ <i class="fas fa-plus"></i> Добавить домофон
+ </a>
+</div>
+
+<div class="row mb-3">
+ <div class="col-md-6">
+ <form action="{{ url_for('search') }}" method="GET" class="d-flex">
+ <input type="text" name="q" class="form-control" placeholder="Поиск по адресу или коду..." value="{{ request.args.get('q', '') }}">
+ <button type="submit" class="btn btn-outline-secondary ms-2">
+ <i class="fas fa-search"></i>
+ </button>
+ </form>
+ </div>
+</div>
+
+{% if doorphones %}
+ <div class="row">
+ {% for doorphone in doorphones %}
+ <div class="col-md-6 col-lg-4 mb-3">
+ <div class="card doorphone-card h-100">
+ <div class="card-body">
+ <h5 class="card-title">
+ <i class="fas fa-map-marker-alt"></i> {{ doorphone.address }}
+ </h5>
+ {% if doorphone.entrance %}
+ <p class="card-text">
+ <small class="text-muted">
+ <i class="fas fa-door-closed"></i> Подъезд: {{ doorphone.entrance }}
+ </small>
+ </p>
+ {% endif %}
+ <p class="card-text code-display">
+ <i class="fas fa-key"></i> Код: {{ doorphone.code }}
+ </p>
+ {% if doorphone.notes %}
+ <p class="card-text">
+ <small class="text-muted">{{ doorphone.notes }}</small>
+ </p>
+ {% endif %}
+ </div>
+ <div class="card-footer bg-transparent">
+ <div class="btn-group w-100" role="group">
+ <a href="{{ url_for('edit_doorphone', id=doorphone.id) }}" class="btn btn-outline-primary btn-sm">
+ <i class="fas fa-edit"></i> Изменить
+ </a>
+ <a href="{{ url_for('delete_doorphone', id=doorphone.id) }}" 
+ class="btn btn-outline-danger btn-sm" 
+ onclick="return confirm('Вы уверены, что хотите удалить этот домофон?')">
+ <i class="fas fa-trash"></i> Удалить
+ </a>
+ </div>
+ </div>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+{% else %}
+ <div class="text-center py-5">
+ <i class="fas fa-door-open fa-4x text-muted mb-3"></i>
+ <h3 class="text-muted">Домофоны не найдены</h3>
+ <p class="text-muted">Добавьте первый домофон в базу данных</p>
+ <a href="{{ url_for('add_doorphone') }}" class="btn btn-primary">
+ <i class="fas fa-plus"></i> Добавить домофон
+ </a>
+ </div>
+{% endif %}
+
+<div class="mt-4">
+ <small class="text-muted">
+ Всего домофонов: {{ doorphones|length }}
+ </small>
+</div>
+{% endblock %}

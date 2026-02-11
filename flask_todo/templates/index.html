@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Flask TODO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to bottom, #f7f7f7, #ffffff);
+        }
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .todo-item {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            background-image: linear-gradient(to bottom, #ffffff, #f7f7f7);
+        }
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+        .add-todo {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .add-todo:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flask TODO</h1>
+    <ul class='todo-list'>
+    {% for todo in todos %}
+        <li class='todo-item'>
+            {{ todo.title }}
+            {% if todo.completed %}
+                <span class='completed'> (Completed)</span>
+            {% endif %}
+            <a href='/complete/{{ todo.id }}'>Complete</a>
+            <a href='/delete/{{ todo.id }}'>Delete</a>
+        </li>
+    {% endfor %}
+    </ul>
+    <form action='/add' method='post'>
+        <input type='text' name='title' placeholder='Add new todo'>
+        <button class='add-todo' type='submit'>Add</button>
+    </form>
+</body>
+</html>

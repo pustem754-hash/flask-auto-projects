@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Калькулятор процентов</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+ 
+ body {
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ min-height: 100vh;
+ padding: 20px;
+ }
+ 
+ .container {
+ max-width: 800px;
+ margin: 0 auto;
+ background: white;
+ border-radius: 20px;
+ box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+ overflow: hidden;
+ }
+ 
+ .header {
+ background: linear-gradient(45deg, #4CAF50, #45a049);
+ color: white;
+ text-align: center;
+ padding: 30px;
+ }
+ 
+ .header h1 {
+ font-size: 2.5em;
+ margin-bottom: 10px;
+ }
+ 
+ .header p {
+ opacity: 0.9;
+ font-size: 1.1em;
+ }
+ 
+ .content {
+ padding: 30px;
+ }
+ 
+ .calculator-tabs {
+ display: flex;
+ margin-bottom: 30px;
+ border-bottom: 2px solid #f0f0f0;
+ flex-wrap: wrap;
+ }
+ 
+ .tab {
+ padding: 15px 20px;
+ cursor: pointer;
+ border: none;
+ background: none;
+ color: #666;
+ font-size: 14px;
+ font-weight: 500;
+ transition: all 0.3s ease;
+ flex: 1;
+ min-width: 120px;
+ }
+ 
+ .tab.active {
+ color: #4CAF50;
+ border-bottom: 3px solid #4CAF50;
+ }
+ 
+ .calc-form {
+ display: none;
+ animation: fadeIn 0.3s ease;
+ }
+ 
+ .calc-form.active {
+ display: block;
+ }
+ 
+ @keyframes fadeIn {
+ from { opacity: 0; transform: translateY(10px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+ 
+ .form-group {
+ margin-bottom: 20px;
+ }
+ 
+ .form-group label {
+ display: block;
+ margin-bottom: 8px;
+ color: #333;
+ font-weight: 500;
+ }
+ 
+ .form-group input {
+ width: 100%;
+ padding: 12px 15px;
+ border: 2px solid #e0e0e0;
+ border-radius: 10px;
+ font-size: 16px;
+ transition: border-color 0.3s ease;
+ }
+ 
+ .form-group input:focus {
+ outline: none;
+ border-color: #4CAF50;
+ }
+ 
+ .btn-calculate {
+ width: 100%;
+ padding: 15px;
+ background: linear-gradient(45deg, #4CAF50, #45a049);
+ color: white;
+ border: none;
+ border-radius: 10px;
+ font-size: 16px;
+ font-weight: bold;
+ cursor: pointer;
+ transition: transform 0.2s ease;
+ }
+ 
+ .btn-calculate:hover {
+ transform: translateY(-2px);
+ }
+ 
+ .result {
+ margin-top: 30px;
+ padding: 20px;
+ background: #f8f9fa;
+ border-radius: 10px;
+ border-left: 5px solid #4CAF50;
+ display: none;
+ }
+ 
+ .result.show {
+ display: block;
+ animation: slideIn 0.3s ease;
+ }
+ 
+ @keyframes slideIn {
+ from { opacity: 0; transform: translateX(-20px); }
+ to { opacity: 1; transform: translateX(0); }
+ }
+ 
+ .result-value {
+ font-size: 2em;
+ font-weight: bold;
+ color: #4CAF50;
+ margin-bottom: 10px;
+ }
+ 
+ .result-formula {
+ color: #666;
+ font-size: 1.1em;
+ }
+ 
+ .error {
+ color: #e74c3c;
+ padding: 15px;
+ background: #ffeaea;
+ border-radius: 10px;
+ margin-top: 20px;
+ display: none;
+ }
+ 
+ .error.show {
+ display: block;
+ }
+ 
+ @media (max-width: 768px) {
+ .calculator-tabs {
+ flex-direction: column;
+ }
+ 
+ .tab {
+ text-align: center;
+ border-bottom: 1px solid #e0e0e0;
+ }
+ 
+ .tab.active {
+ border-bottom: 3px solid #4CAF50;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <div class="header">
+ <h1>🧮 Калькулятор процентов</h1>
+ <p>Быстрые и точные расчеты процентов для любых задач</p>
+ </div>
+ 
+ <div class="content">
+ <div class="calculator-tabs">
+ <button class="tab active" onclick="showTab('percentage_of')">% от числа</button>
+ <button class="tab" onclick="showTab('what_percentage')">Какой %</button>
+ <button class="tab" onclick="showTab('percentage_change')">Изменение</button>
+ <button class="tab" onclick="showTab('add_percentage')">Прибавить %</button>
+ <button class="tab" onclick="showTab('subtract_percentage')">Отнять %</button>
+ </div>
+ 
+ <!-- Процент от числа -->
+ <form class="calc-form active" id="percentage_of">
+ <div class="form-group">
+ <label>Число:</label>
+ <input type="number" step="any" name="number" placeholder="Введите число" required>
+ </div>
+ <div class="form-group">
+ <label>Процент (%):</label>
+ <input type="number" step="any" name="percentage" placeholder="Введите процент" required>
+ </div>
+ <button type="submit" class="btn-calculate">Рассчитать</button>
+ </form>
+ 
+ <!-- Какой процент -->
+ <form class="calc-form" id="what_percentage">
+ <div class="form-group">
+ <label>Часть:</label>
+ <input type="number" step="any" name="part" placeholder="Введите часть" required>
+ </div>
+ <div class="form-group">
+ <label>Целое:</label>
+ <input type="number" step="any" name="whole" placeholder="Введите целое число" required>
+ </div>
+ <button type="submit" class="btn-calculate">Рассчитать</button>
+ </form>
+ 
+ <!-- Процентное изменение -->
+ <form class="calc-form" id="percentage_change">
+ <div class="form-group">
+ <label>Старое значение:</label>
+ <input type="number" step="any" name="old_value" placeholder="Введите старое значение" required>
+ </div>
+ <div class="form-group">
+ <label>Новое значение:</label>
+ <input type="number" step="any" name="new_value" placeholder="Введите новое значение" required>
+ </div>
+ <button type="submit" class="btn-calculate">Рассчитать</button>
+ </form>
+ 
+ <!-- Прибавить процент -->
+ <form class="calc-form" id="add_percentage">
+ <div class="form-group">
+ <label>Число:</label>
+ <input type="number" step="any" name="number" placeholder="Введите число" required>
+ </div>
+ <div class="form-group">
+ <label>Процент для прибавления (%):</label>
+ <input type="number" step="any" name="percentage" placeholder="Введите процент" required>
+ </div>
+ <button type="submit" class="btn-calculate">Рассчитать</button>
+ </form>
+ 
+ <!-- Отнять процент -->
+ <form class="calc-form" id="subtract_percentage">
+ <div class="form-group">
+ <label>Число:</label>
+ <input type="number" step="any" name="number" placeholder="Введите число" required>
+ </div>
+ <div class="form-group">
+ <label>Процент для вычитания (%):</label>
+ <input type="number" step="any" name="percentage" placeholder="Введите процент" required>
+ </div>
+ <button type="submit" class="btn-calculate">Рассчитать</button>
+ </form>
+ 
+ <div class="result" id="result">
+ <div class="result-value" id="result-value"></div>
+ <div class="result-formula" id="result-formula"></div>
+ </div>
+ 
+ <div class="error" id="error"></div>
+ </div>
+ </div>
+ 
+ <script>
+ function showTab(tabName) {
+ // Скрыть все формы
+ document.querySelectorAll('.calc-form').forEach(form => {
+ form.classList.remove('active');
+ });
+ 
+ // Убрать активность со всех табов
+ document.querySelectorAll('.tab').forEach(tab => {
+ tab.classList.remove('active');
+ });
+ 
+ // Показать выбранную форму
+ document.getElementById(tabName).classList.add('active');
+ 
+ // Активировать выбранный таб
+ event.target.classList.add('active');
+ 
+ // Скрыть результат
+ hideResult();
+ }
+ 
+ function hideResult() {
+ document.getElementById('result').classList.remove('show');
+ document.getElementById('error').classList.remove('show');
+ }
+ 
+ function showResult(result, formula) {
+ document.getElementById('result-value').textContent = result;
+ document.getElementById('result-formula').textContent = formula;
+ document.getElementById('result').classList.add('show');
+ document.getElementById('error').classList.remove('show');
+ }
+ 
+ function showError(message) {
+ document.getElementById('error').textContent = message;
+ document.getElementById('error').classList.add('show');
+ document.getElementById('result').classList.remove('show');
+ }
+ 
+ // Обработка отправки форм
+ document.querySelectorAll('.calc-form').forEach(form => {
+ form.addEventListener('submit', async (e) => {
+ e.preventDefault();
+ 
+ const formData = new FormData(form);
+ const data = Object.fromEntries(formData.entries());
+ data.type = form.id;
+ 
+ try {
+ const response = await fetch('/calculate', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ },
+ body: JSON.stringify(data)
+ });
+ 
+ const result = await response.json();
+ 
+ if (response.ok) {
+ showResult(result.result, result.formula);
+ } else {
+ showError(result.error);
+ }
+ } catch (error) {
+ showError('Ошибка соединения с сервером');
+ }
+ });
+ });
+ </script>
+</body>
+</html>

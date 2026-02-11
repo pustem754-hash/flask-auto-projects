@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Ошибка сервера - PDF Генератор{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="display-1 text-danger">500</h1>
+                    <h2 class="card-title">Ошибка сервера</h2>
+                    <p class="card-text">Произошла внутренняя ошибка сервера. Попробуйте позже.</p>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        🏠 Вернуться на главную
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

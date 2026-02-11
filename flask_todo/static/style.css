@@ -1,0 +1,18 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(to bottom, #f7f7f7, #ffffff);
+    animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-image: linear-gradient(to bottom, #f7f7f7, #ffffff);
+    }
+    50% {
+        background-image: linear-gradient(to bottom, #ffffff, #f7f7f7);
+    }
+    100% {
+        background-image: linear-gradient(to bottom, #f7f7f7, #ffffff);
+    }
+}

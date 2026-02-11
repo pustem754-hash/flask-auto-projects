@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+ <div class="col-md-8 mx-auto">
+ <!-- Форма добавления нового товара -->
+ <div class="card mb-4">
+ <div class="card-header">
+ <h5 class="mb-0">
+ <i class="fas fa-plus me-2"></i>
+ Добавить товар
+ </h5>
+ </div>
+ <div class="card-body">
+ <form method="POST" action="{{ url_for('add_item') }}">
+ <div class="row">
+ <div class="col-md-5">
+ <input type="text" name="name" class="form-control" placeholder="Название товара" required>
+ </div>
+ <div class="col-md-3">
+ <input type="text" name="quantity" class="form-control" placeholder="Количество" value="1">
+ </div>
+ <div class="col-md-2">
+ <select name="category" class="form-select">
+ <option value="Продукты">Продукты</option>
+ <option value="Овощи/Фрукты">Овощи/Фрукты</option>
+ <option value="Молочные">Молочные</option>
+ <option value="Мясо/Рыба">Мясо/Рыба</option>
+ <option value="Хлеб">Хлеб</option>
+ <option value="Напитки">Напитки</option>
+ <option value="Бытовая химия">Бытовая химия</option>
+ <option value="Прочее" selected>Прочее</option>
+ </select>
+ </div>
+ <div class="col-md-2">
+ <button type="submit" class="btn btn-primary w-100">
+ <i class="fas fa-plus"></i>
+ </button>
+ </div>
+ </div>
+ </form>
+ </div>
+ </div>
+
+ <!-- Список товаров -->
+ <div class="card">
+ <div class="card-header d-flex justify-content-between align-items-center">
+ <h5 class="mb-0">
+ <i class="fas fa-list me-2"></i>
+ Мой список ({{ items|length }} товаров)
+ </h5>
+ {% if items|selectattr('is_completed')|list|length > 0 %}
+ <a href="{{ url_for('clear_completed') }}" class="btn btn-outline-danger btn-sm"
+ onclick="return confirm('Удалить все выполненные покупки?')">
+ <i class="fas fa-trash me-1"></i>
+ Очистить выполненные
+ </a>
+ {% endif %}
+ </div>
+ <div class="card-body p-0">
+ {% if items %}
+ <div class="list-group list-group-flush">
+ {% for item in items %}
+ <div class="list-group-item shopping-item d-flex justify-content-between align-items-center {{ 'completed' if item.is_completed }}">
+ <div class="d-flex align-items-center flex-grow-1">
+ <div class="form-check me-3">
+ <a href="{{ url_for('toggle_item', item_id=item.id) }}" class="text-decoration-none">
+ <i class="fas fa-{{ 'check-square text-success' if item.is_completed else 'square text-muted' }}"></i>
+ </a>
+ </div>
+ <div class="flex-grow-1">
+ <h6 class="mb-1 {{ 'text-muted' if item.is_completed }}">{{ item.name }}</h6>
+ <small class="text-muted">
+ <span class="badge bg-secondary category-badge me-2">{{ item.category }}</span>
+ Количество: {{ item.quantity }}
+ </small>
+ </div>
+ </div>
+ <div class="text-end">
+ <small class="text-muted d-block">{{ item.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+ <a href="{{ url_for('delete_item', item_id=item.id) }}" 
+ class="btn btn-outline-danger btn-sm mt-1"
+ onclick="return confirm('Удалить {{ item.name }}?')">
+ <i class="fas fa-trash"></i>
+ </a>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ {% else %}
+ <div class="text-center py-4">
+ <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+ <h5 class="text-muted">Список пуст</h5>
+ <p class="text-muted">Добавьте первый товар в ваш список покупок</p>
+ </div>
+ {% endif %}
+ </div>
+ </div>
+
+ {% if items %}
+ <div class="mt-3">
+ <div class="row text-center">
+ <div class="col-md-4">
+ <div class="card bg-light">
+ <div class="card-body">
+ <h5 class="text-primary">{{ items|length }}</h5>
+ <small class="text-muted">Всего товаров</small>
+ </div>
+ </div>
+ </div>
+ <div class="col-md-4">
+ <div class="card bg-light">
+ <div class="card-body">
+ <h5 class="text-success">{{ items|selectattr('is_completed')|list|length }}</h5>
+ <small class="text-muted">Куплено</small>
+ </div>
+ </div>
+ </div>
+ <div class="col-md-4">
+ <div class="card bg-light">
+ <div class="card-body">
+ <h5 class="text-warning">{{ items|rejectattr('is_completed')|list|length }}</h5>
+ <small class="text-muted">Осталось купить</small>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ {% endif %}
+ </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Вопрос {{ question_num }} из {{ total }}{% endblock %}
+
+{% block content %}
+<h2>Вопрос {{ question_num }} из {{ total }}</h2>
+
+<div class="progress">
+ <div class="progress-bar" style="width: {{ (question_num / total * 100) }}%"></div>
+</div>
+
+<div class="question-text">
+ {{ question.question }}
+</div>
+
+<form method="POST" action="{{ url_for('answer') }}">
+ <div class="options">
+ {% for i, option in enumerate(question.options) %}
+ <label class="option">
+ <input type="radio" name="answer" value="{{ i }}" required>
+ {{ option }}
+ </label>
+ {% endfor %}
+ </div>
+ 
+ <button type="submit" class="btn">➡️ Следующий вопрос</button>
+</form>
+{% endblock %}

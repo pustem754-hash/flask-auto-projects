@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Создать PDF - PDF Генератор{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">📝 Создание PDF документа</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('generate_pdf') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Заголовок документа *</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="Введите заголовок документа" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="author" class="form-label">Автор</label>
+                            <input type="text" class="form-control" id="author" name="author" 
+                                   placeholder="Введите имя автора">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Содержимое документа *</label>
+                            <textarea class="form-control" id="content" name="content" rows="10" 
+                                      placeholder="Введите текст документа..." required></textarea>
+                            <div class="form-text">Используйте пустые строки для создания новых параграфов.</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                🔄 Сгенерировать и скачать PDF
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Дополнительные опции -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">🚀 Быстрые действия</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Нужен простой пример PDF? Попробуйте готовый шаблон:</p>
+                    <a href="{{ url_for('simple_pdf') }}" class="btn btn-outline-success">
+                        📄 Скачать образец PDF
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Инструкции -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">💡 Инструкции</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>✅ Заполните заголовок и содержимое (обязательные поля)</li>
+                        <li>✅ Автор - необязательное поле</li>
+                        <li>✅ Используйте переносы строк для создания параграфов</li>
+                        <li>✅ PDF будет автоматически скачан после генерации</li>
+                        <li>✅ Дата создания добавляется автоматически</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Автосохранение данных формы в localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input, textarea');
+    
+    // Загружаем сохраненные данные
+    inputs.forEach(input => {
+        const saved = localStorage.getItem('pdf_form_' + input.name);
+        if (saved) {
+            input.value = saved;
+        }
+    });
+    
+    // Сохраняем данные при изменении
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            localStorage.setItem('pdf_form_' + input.name, input.value);
+        });
+    });
+    
+    // Очищаем сохраненные данные после отправки формы
+    form.addEventListener('submit', function() {
+        inputs.forEach(input => {
+            localStorage.removeItem('pdf_form_' + input.name);
+        });
+    });
+});
+</script>
+{% endblock %}

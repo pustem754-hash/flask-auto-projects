@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+from flask import Flask, render_template_string, request, redirect
+import os
+from datetime import datetime
+
+app = Flask(__name__)
+db = {"posts": [], "comments": {}}
+
+@app.route('/')
+def index():
+    html = '''
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Блог ЖКХ с постами и комментариями</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {font-family:Arial;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;padding:20px;}
+.container {max-width:1200px;margin:0 auto;background:white;padding:40px;border-radius:20px;}
+h1 {color:#667eea;text-align:center;margin-bottom:30px;}
+.form-group {margin-bottom:20px;}
+label {display:block;margin-bottom:8px;font-weight:500;}
+input,textarea {width:100%;padding:12px;border:2px solid #667eea;border-radius:10px;font-size:16px;}
+textarea {min-height:120px;}
+button {background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:15px 30px;border-radius:10px;cursor:pointer;font-size:16px;font-weight:bold;}
+.item {background:#f8f9fa;padding:20px;margin:15px 0;border-radius:10px;border-left:4px solid #667eea;}
+.item h3 {color:#667eea;margin-bottom:10px;}
+.comment {background:#e9ecef;padding:15px;margin:10px 0 10px 30px;border-radius:8px;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>📝 Блог ЖКХ с постами и комментариями</h1>
+<h2>Новый пост</h2>
+<form method="POST" action="/add">
+<div class="form-group"><label>Заголовок:</label><input name="title" required></div>
+<div class="form-group"><label>Содержание:</label><textarea name="content" required></textarea></div>
+<div class="form-group"><label>Автор:</label><input name="author" value="Администратор"></div>
+<button type="submit">Опубликовать</button>
+</form>
+<h2>Все посты</h2>
+{% if not posts %}
+<div style="text-align:center;color:#999;padding:40px;">Пока нет постов</div>
+{% else %}
+{% for i, post in enumerate(posts) %}
+<div class="item">
+<h3>{{ post.title }}</h3>
+<p>{{ post.content }}</p>
+<div style="color:#666;font-size:14px;margin-top:10px;">Автор: {{ post.author }} | {{ post.date }}</div>
+<form method="POST" action="/comment/{{ i }}" style="margin-top:15px;">
+<input name="text" placeholder="Комментарий..." required>
+<button type="submit">Отправить</button>
+</form>
+{% if i in comments %}
+{% for c in comments[i] %}
+<div class="comment">💬 {{ c }}</div>
+{% endfor %}
+{% endif %}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+</body>
+</html>
+'''
+    return render_template_string(html, posts=db["posts"], comments=db["comments"], enumerate=enumerate)
+
+@app.route('/add', methods=['POST'])
+def add():
+    db["posts"].append({
+        "title": request.form['title'],
+        "content": request.form['content'],
+        "author": request.form['author'],
+        "date": datetime.now().strftime('%d.%m.%Y %H:%M')
+    })
+    return redirect('/')
+
+@app.route('/comment/<int:post_id>', methods=['POST'])
+def comment(post_id):
+    if post_id not in db["comments"]:
+        db["comments"][post_id] = []
+    db["comments"][post_id].append(request.form['text'])
+    return redirect('/')
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5011))
+    app.run(host='0.0.0.0', port=port, debug=False)

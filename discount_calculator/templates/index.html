@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор скидок</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 { color: #667eea; margin-bottom: 30px; text-align: center; }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+        .result.show { display: block; }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .result-row:last-child { border-bottom: none; }
+        .result-row.total {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 Калькулятор скидок</h1>
+        <div class="form-group">
+            <label>Исходная цена (₽):</label>
+            <input type="number" id="originalPrice" step="0.01" placeholder="1000">
+        </div>
+        <div class="form-group">
+            <label>Скидка (%):</label>
+            <input type="number" id="discountPercent" step="0.01" placeholder="20">
+        </div>
+        <button onclick="calculate()">Рассчитать</button>
+        
+        <div class="result" id="result">
+            <div class="result-row">
+                <span>Исходная цена:</span>
+                <strong id="resOriginal">0 ₽</strong>
+            </div>
+            <div class="result-row">
+                <span>Скидка:</span>
+                <strong id="resDiscount">0%</strong>
+            </div>
+            <div class="result-row">
+                <span>Сумма скидки:</span>
+                <strong id="resSavings">0 ₽</strong>
+            </div>
+            <div class="result-row total">
+                <span>Итоговая цена:</span>
+                <strong id="resFinal">0 ₽</strong>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function calculate() {
+            const originalPrice = parseFloat(document.getElementById('originalPrice').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+            
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    original_price: originalPrice,
+                    discount_percent: discountPercent
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('resOriginal').textContent = data.original_price + ' ₽';
+                document.getElementById('resDiscount').textContent = data.discount_percent + '%';
+                document.getElementById('resSavings').textContent = data.savings + ' ₽';
+                document.getElementById('resFinal').textContent = data.final_price + ' ₽';
+                document.getElementById('result').classList.add('show');
+            });
+        }
+    </script>
+</body>
+</html>

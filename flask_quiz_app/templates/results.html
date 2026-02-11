@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Результаты викторины{% endblock %}
+
+{% block content %}
+<h1>🎉 Викторина завершена!</h1>
+
+<div class="score {{ result_class }}">
+ {{ score }} / {{ total }}
+</div>
+
+<div style="font-size: 1.5em; margin: 20px 0;">
+ {{ percentage }}% правильных ответов
+</div>
+
+<div style="font-size: 2em; margin: 30px 0;" class="{{ result_class }}">
+ {{ result_text }}
+</div>
+
+<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 30px 0;">
+ <h3 style="color: #333; margin-bottom: 15px;">📊 Ваш результат:</h3>
+ {% if percentage >= 80 %}
+ <p style="color: #28a745;">Превосходно! У вас отличные знания! 🌟</p>
+ {% elif percentage >= 60 %}
+ <p style="color: #17a2b8;">Хороший результат! Продолжайте в том же духе! 👍</p>
+ {% elif percentage >= 40 %}
+ <p style="color: #ffc107;">Неплохо! Есть над чем поработать! 📚</p>
+ {% else %}
+ <p style="color: #dc3545;">Нужно больше читать и учиться! 📖</p>
+ {% endif %}
+</div>
+
+<a href="{{ url_for('start_quiz') }}" class="btn">🔄 Пройти еще раз</a>
+<a href="{{ url_for('index') }}" class="btn">🏠 На главную</a>
+{% endblock %}

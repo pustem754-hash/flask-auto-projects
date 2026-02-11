@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить задачу - Список дел{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+ <div class="col-md-6">
+ <div class="card">
+ <div class="card-header">
+ <h4 class="mb-0">
+ <i class="fas fa-plus"></i> Добавить новую задачу
+ </h4>
+ </div>
+ <div class="card-body">
+ <form method="POST">
+ <div class="mb-3">
+ <label for="title" class="form-label">Название задачи *</label>
+ <input type="text" class="form-control" id="title" name="title" required>
+ </div>
+ 
+ <div class="mb-3">
+ <label for="description" class="form-label">Описание</label>
+ <textarea class="form-control" id="description" name="description" rows="3" placeholder="Дополнительная информация о задаче..."></textarea>
+ </div>
+ 
+ <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+ <a href="{{ url_for('index') }}" class="btn btn-secondary me-md-2">
+ <i class="fas fa-arrow-left"></i> Отмена
+ </a>
+ <button type="submit" class="btn btn-primary">
+ <i class="fas fa-save"></i> Сохранить
+ </button>
+ </div>
+ </form>
+ </div>
+ </div>
+ </div>
+</div>
+{% endblock %}

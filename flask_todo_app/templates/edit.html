@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Редактировать задачу</title>
+ <style>
+ body {
+ font-family: Arial, sans-serif;
+ max-width: 800px;
+ margin: 0 auto;
+ padding: 20px;
+ background-color: #f5f5f5;
+ }
+ .container {
+ background: white;
+ padding: 20px;
+ border-radius: 10px;
+ box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+ }
+ h1 {
+ color: #333;
+ text-align: center;
+ }
+ .form-group {
+ margin-bottom: 15px;
+ }
+ label {
+ display: block;
+ margin-bottom: 5px;
+ font-weight: bold;
+ }
+ input[type="text"], textarea {
+ width: 100%;
+ padding: 10px;
+ border: 1px solid #ddd;
+ border-radius: 5px;
+ box-sizing: border-box;
+ }
+ textarea {
+ height: 80px;
+ resize: vertical;
+ }
+ .btn {
+ background: #007bff;
+ color: white;
+ padding: 10px 20px;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+ text-decoration: none;
+ display: inline-block;
+ margin: 5px;
+ }
+ .btn:hover {
+ background: #0056b3;
+ }
+ .btn-secondary {
+ background: #6c757d;
+ }
+ .btn-secondary:hover {
+ background: #545b62;
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <h1>✏️ Редактировать задачу</h1>
+ 
+ <form method="POST">
+ <div class="form-group">
+ <label for="title">Название задачи:</label>
+ <input type="text" id="title" name="title" value="{{ todo.title }}" required>
+ </div>
+ <div class="form-group">
+ <label for="description">Описание:</label>
+ <textarea id="description" name="description">{{ todo.description if todo.description else '' }}</textarea>
+ </div>
+ <button type="submit" class="btn">Сохранить изменения</button>
+ <a href="/" class="btn btn-secondary">Отмена</a>
+ </form>
+ </div>
+</body>
+</html>

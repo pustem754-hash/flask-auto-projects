@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - Заметки о книгах{% endblock %}
+
+{% block content %}
+<div class="row">
+ <div class="col-md-12">
+ <div class="card">
+ <div class="card-header d-flex justify-content-between align-items-center">
+ <div>
+ <h3 class="mb-0">{{ book.title }}</h3>
+ <small class="text-muted">Добавлено: {{ book.created_at.strftime('%d.%m.%Y в %H:%M') }}</small>
+ </div>
+ <div class="btn-group" role="group">
+ <a href="{{ url_for('edit_book', id=book.id) }}" class="btn btn-outline-primary">
+ <i class="fas fa-edit"></i> Изменить
+ </a>
+ <a href="{{ url_for('delete_book', id=book.id) }}" 
+ class="btn btn-outline-danger"
+ onclick="return confirm('Вы уверены, что хотите удалить эту книгу?')">
+ <i class="fas fa-trash"></i> Удалить
+ </a>
+ </div>
+ </div>
+ 
+ <div class="card-body">
+ <div class="row">
+ <div class="col-md-6">
+ <h5><i class="fas fa-user"></i> Автор</h5>
+ <p>{{ book.author }}</p>
+ </div>
+ <div class="col-md-6">
+ {% if book.genre %}
+ <h5><i class="fas fa-tags"></i> Жанр</h5>
+ <p><span class="badge bg-secondary">{{ book.genre.title() }}</span></p>
+ {% endif %}
+ </div>
+ </div>
+ 
+ {% if book.rating %}
+ <div class="mb-3">
+ <h5><i class="fas fa-star"></i> Оценка</h5>
+ <div>
+ {% for i in range(book.rating) %}
+ <i class="fas fa-star text-warning"></i>
+ {% endfor %}
+ {% for i in range(5 - book.rating) %}
+ <i class="far fa-star text-muted"></i>
+ {% endfor %}
+ <span class="ms-2">{{ book.rating }}/5</span>
+ </div>
+ </div>
+ {% endif %}
+ 
+ {% if book.notes %}
+ <div class="mb-3">
+ <h5><i class="fas fa-sticky-note"></i> Заметки</h5>
+ <div class="p-3 bg-light rounded">
+ {{ book.notes|replace('\n', '<br>')|safe }}
+ </div>
+ </div>
+ {% else %}
+ <div class="text-muted text-center py-3">
+ <i class="fas fa-edit fa-2x mb-2"></i>
+ <p>Заметки не добавлены</p>
+ </div>
+ {% endif %}
+ </div>
+ 
+ <div class="card-footer">
+ <a href="{{ url_for('index') }}" class="btn btn-secondary">
+ <i class="fas fa-arrow-left"></i> Назад к списку
+ </a>
+ </div>
+ </div>
+ </div>
+</div>
+{% endblock %}

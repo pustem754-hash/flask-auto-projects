@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>TODO App</title>
+    <style>
+        body {
+            background-image: linear-gradient(to bottom right, #ff69b4, #ffe6cc);
+        }
+        .todo {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .complete {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <h1>TODO App</h1>
+    <form action='/add' method='post'>
+        <input type='text' name='title' placeholder='Add new todo'>
+        <input type='submit' value='Add'>
+    </form>
+    {% for todo in todos %}
+    <div class='todo'>
+        <p {% if todo.complete %} class='complete' {% endif %}>{{ todo.title }}</p>
+        {% if not todo.complete %}
+        <a href='/complete/{{ todo.id }}'>Complete</a>
+        {% endif %}
+        <a href='/delete/{{ todo.id }}'>Delete</a>
+    </div>
+    {% endfor %}
+</body>
+</html>

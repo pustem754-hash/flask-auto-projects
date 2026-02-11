@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body p-4">
+        <h2 class="card-title text-center mb-4">
+            <i class="fas fa-edit me-2"></i>Создание PDF документа
+        </h2>
+        
+        <form method="POST" action="{{ url_for('generate_pdf') }}" id="pdfForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-bold">
+                            <i class="fas fa-heading me-1"></i>Заголовок документа *
+                        </label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               placeholder="Введите заголовок документа" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="author" class="form-label fw-bold">
+                            <i class="fas fa-user me-1"></i>Автор
+                        </label>
+                        <input type="text" class="form-control" id="author" name="author" 
+                               placeholder="Имя автора">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="subject" class="form-label fw-bold">
+                    <i class="fas fa-tag me-1"></i>Тема
+                </label>
+                <input type="text" class="form-control" id="subject" name="subject" 
+                       placeholder="Тема документа">
+            </div>
+            
+            <div class="mb-3">
+                <label for="content" class="form-label fw-bold">
+                    <i class="fas fa-align-left me-1"></i>Основное содержание *
+                </label>
+                <textarea class="form-control" id="content" name="content" rows="6" 
+                          placeholder="Введите основной текст документа..." required></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="notes" class="form-label fw-bold">
+                    <i class="fas fa-sticky-note me-1"></i>Примечания
+                </label>
+                <textarea class="form-control" id="notes" name="notes" rows="3" 
+                          placeholder="Дополнительные примечания (необязательно)"></textarea>
+            </div>
+            
+            <hr class="my-4">
+            
+            <h5 class="mb-3">
+                <i class="fas fa-table me-2"></i>Дополнительные поля
+            </h5>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="table_field_1" class="form-label">Поле 1</label>
+                        <input type="text" class="form-control" id="table_field_1" name="table_field_1" 
+                               placeholder="Дополнительное поле">
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="table_field_2" class="form-label">Поле 2</label>
+                        <input type="text" class="form-control" id="table_field_2" name="table_field_2" 
+                               placeholder="Дополнительное поле">
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="table_field_3" class="form-label">Поле 3</label>
+                        <input type="text" class="form-control" id="table_field_3" name="table_field_3" 
+                               placeholder="Дополнительное поле">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label for="signature" class="form-label fw-bold">
+                    <i class="fas fa-signature me-1"></i>Подпись
+                </label>
+                <input type="text" class="form-control" id="signature" name="signature" 
+                       placeholder="Подпись документа">
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" class="btn btn-outline-secondary me-md-2" onclick="clearForm()">
+                    <i class="fas fa-eraser me-1"></i>Очистить
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-download me-1"></i>Создать PDF
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <small class="text-white-50">
+        <i class="fas fa-info-circle me-1"></i>
+        Поля отмеченные * являются обязательными
+    </small>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function clearForm() {
+    if (confirm('Вы уверены, что хотите очистить все поля?')) {
+        document.getElementById('pdfForm').reset();
+    }
+}
+
+// Автосохранение данных в localStorage
+const form = document.getElementById('pdfForm');
+const inputs = form.querySelectorAll('input, textarea');
+
+// Загружаем сохраненные данные
+inputs.forEach(input => {
+    const savedValue = localStorage.getItem('pdf_' + input.name);
+    if (savedValue) {
+        input.value = savedValue;
+    }
+    
+    // Сохраняем при изменении
+    input.addEventListener('input', function() {
+        localStorage.setItem('pdf_' + this.name, this.value);
+    });
+});
+
+// Очищаем localStorage при отправке формы
+form.addEventListener('submit', function() {
+    inputs.forEach(input => {
+        localStorage.removeItem('pdf_' + input.name);
+    });
+});
+</script>
+{% endblock %}

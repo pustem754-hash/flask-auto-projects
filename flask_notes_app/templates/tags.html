@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Управление тегами - Мои заметки{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+ <h1>Управление тегами</h1>
+ <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+ <i class="fas fa-arrow-left"></i> Назад к заметкам
+ </a>
+</div>
+
+{% if tags %}
+ <div class="row">
+ <div class="col-md-8">
+ <div class="card">
+ <div class="card-header">
+ <h5 class="mb-0">Все теги ({{ tags|length }})</h5>
+ </div>
+ <div class="card-body">
+ {% for tag in tags %}
+ <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+ <div>
+ <span class="badge bg-secondary me-2">{{ tag.name }}</span>
+ <small class="text-muted">
+ {{ tag.notes|length }} 
+ {% if tag.notes|length == 1 %}заметка{% elif tag.notes|length < 5 %}заметки{% else %}заметок{% endif %}
+ </small>
+ </div>
+ <div>
+ <a href="{{ url_for('index', tag=tag.name) }}" class="btn btn-sm btn-outline-primary me-2">
+ <i class="fas fa-eye"></i> Показать заметки
+ </a>
+ <form method="POST" action="{{ url_for('delete_tag', id=tag.id) }}" class="d-inline"
+ onsubmit="return confirm('Удалить тег \"{{ tag.name }}\"? Он будет удален из всех заметок.')">
+ <button type="submit" class="btn btn-sm btn-outline-danger">
+ <i class="fas fa-trash"></i>
+ </button>
+ </form>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ </div>
+ <div class="col-md-4">
+ <div class="card">
+ <div class="card-header">
+ <h6 class="mb-0">Статистика</h6>
+ </div>
+ <div class="card-body">
+ <p><strong>Всего тегов:</strong> {{ tags|length }}</p>
+ <p><strong>Самые популярные:</strong></p>
+ {% for tag in tags|sort(attribute='notes')|reverse %}
+ {% if loop.index <= 3 and tag.notes|length > 0 %}
+ <div class="mb-1">
+ <span class="badge bg-primary">{{ tag.name }}</span>
+ <small class="text-muted">{{ tag.notes|length }}</small>
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <div class="card mt-3">
+ <div class="card-header">
+ <h6 class="mb-0">Подсказка</h6>
+ </div>
+ <div class="card-body">
+ <small class="text-muted">
+ Теги создаются автоматически при создании или редактировании заметок. 
+ Используйте их для организации контента.
+ </small>
+ </div>
+ </div>
+ </div>
+ </div>
+{% else %}
+ <div class="text-center py-5">
+ <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+ <h3 class="text-muted">Тегов пока нет</h3>
+ <p class="text-muted">Теги создаются автоматически при добавлении заметок</p>
+ <a href="{{ url_for('new_note') }}" class="btn btn-primary">
+ <i class="fas fa-plus"></i> Создать первую заметку
+ </a>
+ </div>
+{% endif %}
+{% endblock %}
